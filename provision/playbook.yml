@@ -6,6 +6,10 @@
     nginx_app_domain_name: "veddar.kartan.no"
     nginx_app_webroot: /var/www/{{nginx_app_domain_name}}
     letsencrypt_email: kjartanbjorset@gmail.com 
+  
+  pre_tasks:
+    - apt: name=bzr state=present
+    - shell: go get gopkg.in/niemeyer/godeb.v1/cmd/godeb
 
   roles:
     - joshualund.golang 
