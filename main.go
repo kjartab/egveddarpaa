@@ -51,10 +51,14 @@ func main() {
 		fmt.Fprintf(w, "Mined sucessfully, %q", html.EscapeString(r.URL.Path))
 		})
 
-	/*http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
-		numOfProjects, _ = contract.NumberOfProjects(nil)
-		fmt.Fprintf(w, "%v projects", html.EscapeString(numOfProjects))
-		})*/
+	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
+		numOfProjects, err := contract.NumberOfProjects(nil)
+		if err != nil {
+			fmt.Fprintf(w, "Error: %v", err)
+		} else {
+			fmt.Fprintf(w, "%q projects", numOfProjects.String())
+		}
+		})
 
 
 	log.Fatal(http.ListenAndServe(cfg.HttpAddress, nil))
