@@ -58,6 +58,17 @@ func main() {
 		fmt.Fprintf(w, "%v projects\n", numOfProjects.String())
 		})
 
+	http.HandleFunc("/new", func(w http.ResponseWriter, r *http.Request) {
+		// instantiate deployed contract
+		fmt.Printf("Instantiating contract at address %s...\n", auth.From.String())
+		instContract, err := NewWinnerTakesAll(addr, sim)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("could not instantiate contract: %v", err.Error()), http.StatusInternalServerError)
+			return
+		}
+		numOfProjects, _ := instContract.NumberOfProjects(nil)
+		fmt.Fprintf(w, "Success. Number of Projects of instantiated Contract: %d\n", numOfProjects)
+	})
 
 	log.Fatal(http.ListenAndServe(cfg.HttpAddress, nil))
 
