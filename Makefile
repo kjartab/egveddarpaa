@@ -6,4 +6,4 @@ run:
 	go build . && ./egveddarpaa
 
 build_contract:
-	abigen --sol=contract.sol --pkg=main --out=contract.go
+	abigen --sol=contract/contract.sol --pkg=contract --out=contract/contract.go

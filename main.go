@@ -11,6 +11,7 @@ import (
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/kjartab/egveddarpaa/config"
+	"github.com/kjartab/egveddarpaa/contract"
 	"log"
 	"fmt"
 )
@@ -27,7 +28,7 @@ func main() {
 	sim := backends.NewSimulatedBackend(alloc)
 
 	// deploy contract
-	addr, _, contract, err := DeployWinnerTakesAll(auth, sim, big.NewInt(10), big.NewInt(time.Now().Add(2 * time.Minute).Unix()), big.NewInt(time.Now().Add(5 * time.Minute).Unix()))
+	addr, _, contract, err := contract.DeployWinnerTakesAll(auth, sim, big.NewInt(10), big.NewInt(time.Now().Add(2 * time.Minute).Unix()), big.NewInt(time.Now().Add(5 * time.Minute).Unix()))
 	if err != nil {
 		log.Fatalf("could not deploy contract: %v", err)
 	}
@@ -47,7 +48,7 @@ func main() {
 		sim.Commit()
 		// Todo: return current balance
 		fmt.Fprintf(w, "Mined sucessfully, %q", html.EscapeString(r.URL.Path))
-		})
+	})
 
 	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
 		numOfProjects, err := contract.NumberOfProjects(nil)
@@ -56,7 +57,7 @@ func main() {
 			return
 		}
 		fmt.Fprintf(w, "%v projects\n", numOfProjects.String())
-		})
+	})
 
 	http.HandleFunc("/new", func(w http.ResponseWriter, r *http.Request) {
 		// instantiate deployed contract
