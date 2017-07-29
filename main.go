@@ -10,11 +10,15 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/kjartab/egveddarpaa/config"
 	"log"
 	"fmt"
 )
 
 func main() {
+
+	cfg := config.LoadEnvConfig()
+
 	key, _ := crypto.GenerateKey()
 	auth := bind.NewKeyedTransactor(key)
 
@@ -53,6 +57,6 @@ func main() {
 		})*/
 
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(cfg.HttpAddress, nil))
 
 }
