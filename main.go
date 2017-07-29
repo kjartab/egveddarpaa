@@ -54,10 +54,10 @@ func main() {
 	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
 		numOfProjects, err := contract.NumberOfProjects(nil)
 		if err != nil {
-			fmt.Fprintf(w, "Error: %v", err)
-		} else {
-			fmt.Fprintf(w, "%q projects", numOfProjects.String())
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+		fmt.Fprintf(w, "%q projects", numOfProjects.String())
 		})
 
 
