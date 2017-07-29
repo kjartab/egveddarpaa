@@ -42,6 +42,8 @@ func main() {
 			GasLimit: big.NewInt(2381623),
 			Value:    big.NewInt(10),
 		}, "test project", "http://www.example.com")
+		sim.Commit()
+
 		fmt.Fprint(w, "Contract submitted")
 	})
 
