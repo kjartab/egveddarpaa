@@ -34,18 +34,14 @@ func main() {
 	_ = addr
 	_ = contract
 
-	http.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
-		// Todo: pass arguments in request
-		contract.SubmitProject(&bind.TransactOpts{
-			From:     auth.From,
-			Signer:   auth.Signer,
-			GasLimit: big.NewInt(2381623),
-			Value:    big.NewInt(10),
-		}, "test project", "http://www.example.com")
-		sim.Commit()
-
-		fmt.Fprint(w, "Contract submitted")
-	})
+	// Todo: pass arguments in request
+	contract.SubmitProject(&bind.TransactOpts{
+		From:     auth.From,
+		Signer:   auth.Signer,
+		GasLimit: big.NewInt(2381623),
+		Value:    big.NewInt(10),
+	}, "test project", "http://www.example.com")
+	sim.Commit()
 
 	http.HandleFunc("/mine", func(w http.ResponseWriter, r *http.Request) {
 		sim.Commit()
