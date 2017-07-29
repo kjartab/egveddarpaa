@@ -24,4 +24,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not deploy contract: %v", err)
 	}
+	_ = addr
+	_ = contract
 }
