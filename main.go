@@ -1,7 +1,8 @@
 package main
 
 import (
-	"log"
+	"net/http"
+	"html"
 	"math/big"
 	"time"
 
@@ -9,6 +10,8 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/crypto"
+	"log"
+	"fmt"
 )
 
 func main() {
@@ -26,4 +29,11 @@ func main() {
 	}
 	_ = addr
 	_ = contract
+
+	http.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
