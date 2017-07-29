@@ -13,6 +13,7 @@ import (
 	"github.com/kjartab/egveddarpaa/config"
 	"log"
 	"fmt"
+	"github.com/kjartab/egveddarpaa/contracts"
 )
 
 func main() {
@@ -27,7 +28,7 @@ func main() {
 	sim := backends.NewSimulatedBackend(alloc)
 
 	// deploy contract
-	addr, _, contract, err := DeployWinnerTakesAll(auth, sim, big.NewInt(10), big.NewInt(time.Now().Add(2 * time.Minute).Unix()), big.NewInt(time.Now().Add(5 * time.Minute).Unix()))
+	addr, _, contract, err := contracts.DeployWinnerTakesAll(auth, sim, big.NewInt(10), big.NewInt(time.Now().Add(2 * time.Minute).Unix()), big.NewInt(time.Now().Add(5 * time.Minute).Unix()))
 	if err != nil {
 		log.Fatalf("could not deploy contract: %v", err)
 	}
@@ -47,7 +48,7 @@ func main() {
 		sim.Commit()
 		// Todo: return current balance
 		fmt.Fprintf(w, "Mined sucessfully, %q", html.EscapeString(r.URL.Path))
-		})
+	})
 
 	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
 		numOfProjects, err := contract.NumberOfProjects(nil)
@@ -56,12 +57,12 @@ func main() {
 			return
 		}
 		fmt.Fprintf(w, "%v projects\n", numOfProjects.String())
-		})
+	})
 
 	http.HandleFunc("/new", func(w http.ResponseWriter, r *http.Request) {
 		// instantiate deployed contract
 		fmt.Printf("Instantiating contract at address %s...\n", auth.From.String())
-		instContract, err := NewWinnerTakesAll(addr, sim)
+		instContract, err := contracts.NewWinnerTakesAll(addr, sim)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("could not instantiate contract: %v", err.Error()), http.StatusInternalServerError)
 			return
