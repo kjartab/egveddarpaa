@@ -30,9 +30,28 @@ func main() {
 	_ = addr
 	_ = contract
 
-	http.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	http.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
+		// Todo: pass arguments in request
+		contract.SubmitProject(&bind.TransactOpts{
+			From:     auth.From,
+			Signer:   auth.Signer,
+			GasLimit: big.NewInt(2381623),
+			Value:    big.NewInt(10),
+		}, "test project", "http://www.example.com")
+		fmt.Fprint(w, "Contract submitted")
 	})
+
+	http.HandleFunc("/mine", func(w http.ResponseWriter, r *http.Request) {
+		sim.Commit()
+		// Todo: return current balance
+		fmt.Fprintf(w, "Mined sucessfully, %q", html.EscapeString(r.URL.Path))
+		})
+
+	/*http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
+		numOfProjects, _ = contract.NumberOfProjects(nil)
+		fmt.Fprintf(w, "%v projects", html.EscapeString(numOfProjects))
+		})*/
+
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
