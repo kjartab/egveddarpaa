@@ -1,0 +1,17 @@
+---
+- hosts: regn
+  become: yes
+  vars: 
+    nginx_app_config_template: "veddar_app_config.j2"
+    nginx_app_domain_name: "veddar.kartan.no"
+    nginx_app_webroot: /var/www/{{nginx_app_domain_name}}
+    letsencrypt_email: kjartanbjorset@gmail.com 
+
+  roles:
+    - joshualund.golang 
+    - kjartab.nginx-certbot-app
+
+  tasks:
+    - copy: src=index.html dest={{nginx_app_webroot}}/index.html
+
+  

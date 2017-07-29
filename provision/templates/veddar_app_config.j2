@@ -1,0 +1,32 @@
+server {
+
+    server_name {{nginx_app_domain_name}};
+
+    location ~ /.well-known {
+        allow all;
+    }
+    
+    
+    root /var/www/{{nginx_app_domain_name}};
+    
+    ssl_certificate /etc/letsencrypt/live/{{nginx_app_domain_name}}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{nginx_app_domain_name}}/privkey.pem;
+    
+    listen 443 ssl;
+}
+
+
+server {
+
+    server_name {{nginx_app_domain_name}};
+    root /var/www/{{nginx_app_domain_name}};
+
+    location ~ /.well-known {
+            allow all;
+    }
+
+    listen 80;
+    listen [::]:80;
+
+    return 301 https://$host$request_uri;
+}
