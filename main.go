@@ -59,7 +59,7 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		fmt.Fprintf(w, "%q projects", numOfProjects.String())
+		fmt.Fprintf(w, "%v projects\n", numOfProjects.String())
 		})
 
 
